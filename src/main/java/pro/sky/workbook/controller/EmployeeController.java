@@ -33,6 +33,6 @@ public class EmployeeController {
 
     @GetMapping
     public Collection<Employee> findAll() {
-        return service.findAll();
+        return service.findAll().values();
     }
 }
