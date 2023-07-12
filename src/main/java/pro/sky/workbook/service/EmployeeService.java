@@ -6,10 +6,9 @@ import pro.sky.workbook.exception.EmployeeNotFoundException;
 import pro.sky.workbook.exception.EmployeeStorageIsFullException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class Service implements EmployeeSevice{
+public class EmployeeService implements EmployeeInterface {
     private final Map<String, Employee > employees = new HashMap<>();
 
 
@@ -41,38 +40,13 @@ public class Service implements EmployeeSevice{
         }
         throw new EmployeeNotFoundException();
     }
-
-    @Override
-    public Optional<Employee> findLowestSalaryInDep(int department) {
-        return employees.values().stream()
-                .filter(employee1 -> employee1.getDepartment() == department)
-                .min(Comparator.comparingInt(Employee::getSalary));
-    }
-
-    @Override
-    public Optional<Employee> findHighestSalaryInDep(int department) {
-        return employees.values().stream()
-                .filter(employee1 -> employee1.getDepartment() == department)
-                .max(Comparator.comparingInt(Employee::getSalary));
-    }
-
-    @Override
-    public List<Employee> printDepartment(int department) {
-        return employees.values().stream()
-                .filter(employee1 -> employee1.getDepartment() == department)
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public List<Employee> printDepartmentsInOrder() {
-        return employees.values().stream()
-                .sorted(Comparator.comparingInt(Employee::getDepartment))
-                .collect(Collectors.toList());
-    }
     @Override
     public Collection<Employee> findAll() {
         //return Collections.unmodifiableList((List<? extends Employee>) employees);
         return Collections.unmodifiableCollection(employees.values());
+    }
+
+    public Map<String, Employee> getEmployees() {
+        return employees;
     }
 }
