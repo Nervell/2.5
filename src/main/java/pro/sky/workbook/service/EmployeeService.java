@@ -1,5 +1,8 @@
 package pro.sky.workbook.service;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.workbook.model.Employee;
 import pro.sky.workbook.exception.EmployeeAlreadyAddedException;
 import pro.sky.workbook.exception.EmployeeNotFoundException;
@@ -14,7 +17,10 @@ public class EmployeeService implements EmployeeInterface {
 
     @Override
     public Employee addEmployee(String firstName, String lastName, int department, int salary) throws EmployeeAlreadyAddedException, EmployeeStorageIsFullException {
-        Employee employee = new Employee(firstName, lastName, department, salary);
+        if (!StringUtils.isAlpha(firstName) && StringUtils.isAlpha(lastName)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        Employee employee = new Employee(StringUtils.capitalize(firstName), StringUtils.capitalize(lastName), department, salary);
         if (employees.containsKey(firstName + lastName)) {
             throw new EmployeeAlreadyAddedException();
         }
